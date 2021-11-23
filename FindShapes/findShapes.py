@@ -1,27 +1,32 @@
 import numpy as np
 import cv2
 
-original_image = cv2.imread('images/someshapes.jpg')
+original_image = cv2.imread('images/4star.jpg')
 print("Shape: Original Image", original_image.shape)
 
 # Converting to grayscale
 gray = cv2.cvtColor(original_image, cv2.COLOR_BGR2GRAY)
 print("Shape: Grayscaled Image",gray.shape)
 cv2.imshow("Original Image", original_image)
-cv2.waitKey(0)
+cv2.waitKey(1)
 
 # Thresholding (Optional)
 ret, thresh = cv2.threshold(gray, 127, 255, 1)
 cv2.imshow("Threshold Image", thresh)
-cv2.waitKey(0)
+cv2.waitKey(1)
 
-_, contours, hierarchy = cv2.findContours(thresh.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
+_, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE) #what's the .copy() function in here? might be a built-in function in numpy, to simply copy the content in an array. Or a built-in function for python
 print ('Number of contours', str(len(contours)))
-print (contours[0].shape)
+# print (contours[0].shape)
+
 # Draw contours on original image
-#cv2.drawContours(original_image, contours, -1, (0,255,0), 3)
-#cv2.imshow("Contours on Original", original_image)
-#cv2.waitKey(0)
+Drawing_original = original_image
+# cv2.drawContours(original_image.copy(), contours, -1, (0,255,0), 3)
+# cv2.imshow("Contours on Original", original_image.copy()) #this yields to a output of original pic instead of a contours on original pic.
+cv2.drawContours(Drawing_original, contours, -1, (0,255,0), 3)
+cv2.imshow("Contours on Original", Drawing_original)  
+#After subsitutting Drawing_original with original_image.copy(), the .copy() function works as intended but not as a variable so to say, a.g. it can't store the value that written in the step drawContours()
+cv2.waitKey(0)
 
 for contour in contours:
 	vertices = cv2.approxPolyDP(contour, 0.01*cv2.arcLength(contour,True), True)
@@ -29,10 +34,11 @@ for contour in contours:
 	if len(vertices) == 3:
 		shape = 'Triangle'
 		cv2.drawContours(original_image, [contour], 0, (0,255,0), -1)
-		M = cv2.moments(contour)
-		x = int(M['m10']/ M['m00'])
+		M = cv2.moments(contour) #moments returns the 1st, 2nd, 3rd moment of the shape.
+		x = int(M['m10']/ M['m00']) #calculating the centroid of shape
 		y = int(M['m01']/ M['m00'])
 		cv2.putText(original_image, shape, (x-50, y), cv2.FONT_ITALIC, 1,(0,0,0), 1)
+		#using moments instead of the x and y coordination because the contour doesn't contain info about the location of the contour in the pic.
 
 	# Checking for square or rectangle	
 	elif len(vertices) == 4:

@@ -34,7 +34,7 @@ def get_landmarks(image):
 # Mark and point landmarks' on input image using numbers
 def mark_landmarks(image, landmarks):
 	image = image.copy()
-	for i, point in enumerate(landmarks):
+	for i, point in enumerate(landmarks): #enumerate modify a list into a tuple, for example list = ['A','B','C'], enumerate(list) = [(0, 'A'), (1, 'B'), (2, 'C')]
 		position = (point[0,0], point[0,1])
 		cv2.putText(image, str(i), (position), fontFace=cv2.FONT_ITALIC, fontScale=0.4, color=(0,0,0))
 		cv2.circle(image, position, 3, color=(0,255,0))

@@ -9,6 +9,7 @@ track = (240,100,400,160)
 
 # crop area of tracking window
 cropped = frame[track[0]:track[0]+track[1], track[2]:track[2]+track[3]]
+# aka. cropped = frame[240:340, 400:460]
 
 # BGR to HSV
 cropped_hsv = cv2.cvtColor(cropped, cv2.COLOR_BGR2HSV)

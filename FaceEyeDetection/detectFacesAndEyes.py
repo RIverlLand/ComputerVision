@@ -8,14 +8,14 @@ face_classifier = cv2.CascadeClassifier(cascade_face)
 eye_classifier = cv2.CascadeClassifier(cascade_eye)
 
 # Reading images and converting to grayscale
-image = cv2.imread('images/svalley.jpg')
+image = cv2.imread('images/phone.jpeg')
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
 # Detecting faces
 faces = face_classifier.detectMultiScale(gray, 1.3, 5)
 print (faces)
 
-if faces.any():
+if len(faces):
 	for (x, y, w, h) in faces:
 		print (len(faces))
 		cv2.rectangle(image, (x, y), (x+w, y+h), (0,0,0), 3)
